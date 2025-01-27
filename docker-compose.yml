@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+      - go-bin:/go/bin
+    restart: unless-stopped
+    depends_on:
+      - mockapi
+      - redis
+
+  mockapi:
+    build:
+      context: ./mockapi
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./mockapi:/app
+      - go-bin:/go/bin
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: ./ui
+    ports:
+      - "3000:3000"
+    volumes:
+      #- ./ui:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: sh -c "npm install && npm run dev"
+    develop:
+      watch:
+        - action: sync
+          path: ./ui
+          target: /app
+          ignore:
+            - node_modules/
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  go-bin:

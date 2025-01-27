@@ -1,0 +1,4 @@
+[build]
+command = "go run ./app/mockapi"
+[watch]
+dirs = ["."] 
