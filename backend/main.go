@@ -136,8 +136,6 @@ func fetchEmergencyCareSummary(url string, userID string) ([]EmergencyCareSummar
 // SSE handler to stream updates to the frontend
 func sseHandler(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("in sseHandler()")
-
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -212,8 +210,6 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 // Handler to retrieve data from Redis
 func getDataHandler(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("in getDataHandler()")
-
 	// Set CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -247,11 +243,8 @@ func main() {
 	})
 	
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-	
 		var health = "UP"
-		
 		w.Header().Set("Content-Type", "application/json")
-
 		json.NewEncoder(w).Encode(health)
 	})
 
